@@ -1,6 +1,6 @@
 import protobuf from "protobufjs";
 import path from "path";
-import { GenerateFile } from "leon/umbrella/genType";
+import { GenerateFileTypeScript, GenerateFileGolang } from "leon/umbrella/genType";
 
 
 const protoDir = path.resolve(process.cwd(), "profile");
@@ -15,8 +15,8 @@ const packageName = "profile";
 const root = await protobuf.load(protoPath);
 const pkg = root.lookup(packageName) as protobuf.Namespace;
 
-export const optionsField = "proto3_optional";
-export const typeMap: Record<string, string> = {
+export const OptionsField = "proto3_optional";
+export const TypeMapJavaScript: Record<string, string> = {
   string: "string",
   bool: "boolean",
   int32: "number",
@@ -34,7 +34,26 @@ export const typeMap: Record<string, string> = {
   bytes: "Uint8Array",
 };
 
-GenerateFile(pkg, packageName, protoDir);
+export const TypeMapGolang: Record<string, string> = {
+  string: "string",
+  bool: "bool",
+  int32: "int32",
+  int64: "int64",
+  uint32: "uint32",
+  uint64: "uint64",
+  sint32: "int32",
+  sint64: "int64",
+  fixed32: "uint32",
+  fixed64: "uint64",
+  sfixed32: "int32",
+  sfixed64: "int64",
+  float: "float32",
+  double: "float64",
+  bytes: "[]byte",
+};
+
+GenerateFileTypeScript(pkg, packageName, protoDir);
+GenerateFileGolang(pkg, packageName, protoDir);
 
 
 
